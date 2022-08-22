@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import reactLogo from './assets/react.svg'
 // import './App.css'
 import { Button, ButtonGroup } from '@chakra-ui/react'
-import web3 from 'web3'
 import {AptosAccount} from 'aptos'
 import { starcoin_types } from '@starcoin/starcoin'
-import Eth_wallet from './components/wallets/eth'
+import ETH_wallet from './components/wallets/eth'
+import STC_wallet from './components/wallets/stc'
+import APTOS_wallet from './components/wallets/aptos'
+import STC_Page from './pages/STC'
+
+import { Routes, Route } from "react-router-dom";
 type StateType = {
   count: number;
 };
@@ -29,7 +33,11 @@ export  class App extends React.Component <propType,StateType>{
 
     return (
       <div className="App">
-        <Eth_wallet  />
+        <Routes>
+          <Route path='/' element={<STC_Page />}/>
+          <Route path="/ETH" element={<ETH_wallet />} />
+          <Route path="/STC" element={<STC_wallet />} />
+        </Routes>
       </div>
     )  
   }

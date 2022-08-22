@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, ButtonGroup } from '@chakra-ui/react'
-import { ethers } from 'ethers'
+import {providers, utils, bcs, encoding } from '@starcoin/starcoin'
+
 declare global {
     interface Window {
         store: any;
-        ethereum: any
+        starcoin: any
         __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
     }
 }
@@ -21,7 +22,7 @@ type StateType = {
   };
   
 
-export class ETH_wallet extends React.Component<propType,StateType>{
+export class STC_Wallet extends React.Component<propType,StateType>{
     constructor(props:any){
         super(props);
     
@@ -37,23 +38,23 @@ export class ETH_wallet extends React.Component<propType,StateType>{
 
     //挂载完成
     componentDidMount() {
-        if(window.ethereum){
+        if(window.starcoin){
             let that = this;
-            let provider = new ethers.providers.Web3Provider(window.ethereum)
+            let provider = new providers.Web3Provider(window.starcoin)
             provider.getNetwork().then((network)=>{
                 that.setState({
                     network_id : network.chainId
                 })
             });
 
-            window.ethereum.on('accountsChanged',(addr:string[])=>{
+            window.starcoin.on('accountsChanged',(addr:string[])=>{
                 window.location.reload()
             })
 
-            window.ethereum.on('chainChanged', (_chainId:number) => window.location.reload());
+            window.starcoin.on('chainChanged', (_chainId:number) => window.location.reload());
 
             // 自动链接钱包
-            provider.send("eth_requestAccounts", []).then((addr)=>{
+            provider.send("stc_requestAccounts", []).then((addr)=>{
                 that.setState({
                     address: addr[0],
                     installed:true,
@@ -68,8 +69,8 @@ export class ETH_wallet extends React.Component<propType,StateType>{
     async connect(){
         if(window.ethereum){
             let that = this;
-            let provider = new ethers.providers.Web3Provider(window.ethereum)
-            await provider.send("eth_requestAccounts", []).then((addr)=>{
+            let provider = new providers.Web3Provider(window.starcoin)
+            await provider.send("stc_requestAccounts", []).then((addr)=>{
                 that.setState({
                     address: addr[0],
                     installed:true,
@@ -105,4 +106,4 @@ export class ETH_wallet extends React.Component<propType,StateType>{
     }
 }
 
-export default ETH_wallet
+export default STC_Wallet
