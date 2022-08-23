@@ -8,8 +8,8 @@ import ETH_wallet from './components/wallets/eth'
 import STC_wallet from './components/wallets/stc'
 import APTOS_wallet from './components/wallets/aptos'
 import STC_Page from './pages/STC'
-
-import { Routes, Route } from "react-router-dom";
+import PostPage from './pages/PostPage'
+import {BrowserRouter as Router, Routes, Route } from "react-router-dom";
 type StateType = {
   count: number;
 };
@@ -33,11 +33,14 @@ export  class App extends React.Component <propType,StateType>{
 
     return (
       <div className="App">
-        <Routes>
-          <Route path='/' element={<STC_Page />}/>
-          <Route path="/ETH" element={<ETH_wallet />} />
-          <Route path="/STC" element={<STC_wallet />} />
-        </Routes>
+        
+          <Routes>
+            <Route path='/STCBlog/:address' element={<STC_Page />}/>
+            <Route path='/STCBlog/:address/:idx' element={<PostPage />}/>
+            <Route path="/ETH" element={<ETH_wallet />} />
+            <Route path="/STC" element={<STC_wallet />} />
+          </Routes>
+        
       </div>
     )  
   }

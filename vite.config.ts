@@ -13,8 +13,8 @@ export default defineConfig({
       // see https://github.com/remorses/esbuild-plugins/blob/master/node-modules-polyfill/src/polyfills.ts
       // process and buffer are excluded because already managed
       // by node-globals-polyfill
-      string_decoder:
-        'node_modules/rollup-plugin-node-polyfills/polyfills/string-decoder.js',
+      // string_decoder:
+      //   'node_modules/rollup-plugin-node-polyfills/polyfills/string-decoder.js',
     },
   },
   optimizeDeps: {
