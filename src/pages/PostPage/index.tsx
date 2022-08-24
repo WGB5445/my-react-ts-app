@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import {Box, Button, Grid,GridItem} from '@chakra-ui/react'
+import {Box, Button, CircularProgress, Grid,GridItem} from '@chakra-ui/react'
 import { Text } from '@chakra-ui/react'
 import 'github-markdown-css/github-markdown-light.css'
 import 'highlight.js/styles/github.css'
@@ -20,15 +20,17 @@ function uslugify(s:any) {
 }
 
 
-export default function PostPage (){
-        const [markdown,setMarkdown] = useState('')
-        const [toc,settoc] = useState('')
-        const [fm,setfm] = useState( {title:'',creater:'',date:''})
-        const [url,setUrl] = useState('')
-        // let query = new URLSearchParams(useLocation().search);
-        const params = useParams();
-        
+export default function PostPage (props:any){
+    const [markdown,setMarkdown] = useState('')
+    const [toc,settoc] = useState('')
+    const [fm,setfm] = useState( {title:'',creater:'',date:''})
+    const [url,setUrl] = useState('')
+    const [Indeterminate,setIndeterminate] = useState(false)
+    // let query = new URLSearchParams(useLocation().search);
+    // const params = useParams();
+    let params = props;
     useEffect(() => {
+        setIndeterminate(true)
         var data = JSON.stringify({
             "id": 101,
             "jsonrpc": "2.0",
@@ -55,40 +57,57 @@ export default function PostPage (){
             },
             data : data
           };
-        axios(config).then((data)=>{
+        axios(config)
+        .then((data)=>{
             console.log(data.data.result[0])
-        axios.get( Buffer.from(data.data.result[0].url.substring(2),'hex').toString()).then((data)=>{
-            let md =  MarkdownIt({
-                html: true,
-                linkify: true,
-                typographer: true
-              })
-              .use(highlightjs,{inline:true})
-              .use(markdownItFrontMatter,(data)=>{
-                console.log(yaml.parse(data))
-                setfm(yaml.parse(data))
-              })
+            setIndeterminate(true)
+            axios.get( Buffer.from(data.data.result[0].url.substring(2),'hex').toString())
+            .then((data)=>{
+                let md =  MarkdownIt({
+                    html: true,
+                    linkify: true,
+                    typographer: true
+                })
+                .use(highlightjs,{inline:true})
+                .use(markdownItFrontMatter,(data)=>{
+                    console.log(yaml.parse(data))
+                    setfm(yaml.parse(data))
+                })
 
-              .use(anchor,{permalink: true, permalinkBefore: true, permalinkSymbol: '#',uslugify: uslugify,})
-              .use(markdownItTocDoneRight, {  
-                containerClass: 'toc',//生成的容器的类名，这样最后返回来的字符串是 <nav class="toc"><nav/>
-                containerId: 'toc',//生成的容器的ID，这样最后返回来的字符串是 <nav id="toc"><nav/>
-                listType: 'ul',//导航列表使用ul还是ol
-                listClass: 'listClass',//li标签的样式名
-                linkClass: 'linkClass',//a标签的样式名,
-                uslugify: uslugify,
-                callback: function (toc, ast) {
-                    settoc(toc)
-            }})
-            setMarkdown( md.render(data.data))
-            
+                .use(anchor,{permalink: true, permalinkBefore: true, permalinkSymbol: '#',uslugify: uslugify,})
+                .use(markdownItTocDoneRight, {  
+                    containerClass: 'toc',//生成的容器的类名，这样最后返回来的字符串是 <nav class="toc"><nav/>
+                    containerId: 'toc',//生成的容器的ID，这样最后返回来的字符串是 <nav id="toc"><nav/>
+                    listType: 'ul',//导航列表使用ul还是ol
+                    listClass: 'listClass',//li标签的样式名
+                    linkClass: 'linkClass',//a标签的样式名,
+                    uslugify: uslugify,
+                    callback: function (toc, ast) {
+                        settoc(toc)
+                        props.call_back(toc)
+                }})
+                setMarkdown( md.render(data.data))
+                setIndeterminate(false)
+            })
+            .catch((err)=>{
+                setIndeterminate(false)
+                console.log(err)
+            })
         })
+        .catch((err)=>{
+            setIndeterminate(false)
+            console.log(err)
         })
 
     },[])
 
     return(
         <Box>
+            {
+                Indeterminate?
+                    <CircularProgress isIndeterminate color='green.300' />:null
+                
+            }
             <Text fontSize='4xl'>{fm.title?fm.title:''}</Text>
             <div className="markdown-body" dangerouslySetInnerHTML={{__html: markdown}}/>
         </Box>

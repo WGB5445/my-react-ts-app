@@ -35,8 +35,9 @@ export  class App extends React.Component <propType,StateType>{
       <div className="App">
         
           <Routes>
-            <Route path='/STCBlog/:address' element={<STC_Page />}/>
-            <Route path='/STCBlog/:address/:idx' element={<PostPage />}/>
+            <Route path='/STCBlog/*' element={<STC_Page />}/>
+            <Route path='/STCBlog/:address/*' element={<STC_Page />}/>
+            <Route path='/STCBlog/:address/:idx/*' element={<STC_Page />}/>
             <Route path="/ETH" element={<ETH_wallet />} />
             <Route path="/STC" element={<STC_wallet />} />
           </Routes>
