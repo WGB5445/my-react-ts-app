@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, ButtonGroup,Box ,Text,Flex,Spacer,Grid,HStack} from '@chakra-ui/react'
+import { Button, ButtonGroup,Box ,Text,Flex,Spacer,Grid,HStack, Center} from '@chakra-ui/react'
 
 import STC_wallet from '../wallets/stc'
 import Markdown from '../markdown';
@@ -41,12 +41,12 @@ export class Header extends React.Component<propType,StateType>{
         return (
             <div className="Header">
                 <Box>
-                    <Flex>
-                        <Box w='10%'   >
-                            
-                        </Box>
-                        <Spacer />
-                        <Box w='15%'/>
+                    <Flex bg='yellow.100'>
+                        <Center w='80%'   >
+                            <Text fontSize='4xl' color='Gray' >
+                                去中心化 Markdown 阅读器 - build in Web3.0 
+                            </Text>
+                        </Center>
                         <Spacer />
                         <Box w='10%' >
                             {button}

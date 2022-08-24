@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Markdown from '../../components/markdown'
-import {Box, Button, CircularProgress, Grid,GridItem} from '@chakra-ui/react'
+import {Box, Button, CircularProgress, Grid,GridItem, Heading, VStack} from '@chakra-ui/react'
 import { Text } from '@chakra-ui/react'
 import Header from '../../components/header';
 import axios from 'axios'
@@ -92,11 +92,18 @@ function STC_Page () {
                     </div>
                 </GridItem>
                 <GridItem pl='2'  area={'nav'}>
-                    Nav
+                    <Box>
+                        <VStack spacing={8}>
+                            <Box p={5} shadow='md' borderWidth='1px'>
+                                <Heading fontSize='xl'>{"使用 Starcoin 区块链存储文章信息"}</Heading>
+                                <Text mt={4}>{'去中心化存储，不依赖服务器'}</Text>
+                            </Box>
+                        </VStack>
+                    </Box>
                 </GridItem>
                 <GridItem pl='2'  area={'main'}>
                     { 
-                        params.idx?<PostPage address={params.address} idx={params.idx} call_back={setToc}/>:
+                        params.idx?<PostPage address={params.address} idx={params.idx} call_back={setToc} />:
                             <div>
                                 {
                                     Indeterminate?
@@ -107,19 +114,22 @@ function STC_Page () {
                                     Posts.map((item,i) => (
                                         <Box key={item.name}>
                                             {/* <li key={item.name}>{item.name}</li> */}
-                                            <Link key={item.name} to={ (params.address?'./':'0x3865E774f13E8cb02bBb2225D6605FAA/') + i}>{item.name}</Link>
+                                            <li>
+                                                <Link key={item.name} to={ (params.address?'./':'0x3865E774f13E8cb02bBb2225D6605FAA/') + i}>{item.name}</Link>
+                                            </li>
                                         </Box>
                                     ))
                                 }
                             </div>  
-                        
                     }
                     
 
                 
                 </GridItem>
                 <GridItem pl='2' area={'toc'}>
-                        <Box dangerouslySetInnerHTML={{__html:toc}}></Box>
+                    {
+                       params.idx?<Box dangerouslySetInnerHTML={{__html:toc}}></Box>:''
+                    }
                 </GridItem>
                 <GridItem pl='2' area={'footer'}>
                     Footer

@@ -9,7 +9,7 @@ import STC_wallet from './components/wallets/stc'
 import APTOS_wallet from './components/wallets/aptos'
 import STC_Page from './pages/STC'
 import PostPage from './pages/PostPage'
-import {BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route,Navigate } from "react-router-dom";
 type StateType = {
   count: number;
 };
@@ -35,6 +35,7 @@ export  class App extends React.Component <propType,StateType>{
       <div className="App">
         
           <Routes>
+            <Route path='/' element={<Navigate to="/STCBlog" replace={true}/>}/>
             <Route path='/STCBlog/*' element={<STC_Page />}/>
             <Route path='/STCBlog/:address/*' element={<STC_Page />}/>
             <Route path='/STCBlog/:address/:idx/*' element={<STC_Page />}/>
